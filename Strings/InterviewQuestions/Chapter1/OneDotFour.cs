@@ -1,13 +1,35 @@
-﻿using System;
+﻿using InterviewQuestions.Infrastructure;
+using System;
 
-namespace Strings
+namespace InterviewQuestions.Chapter1
 {
-    public static class OneDotFour
+    public class OneDotFour : Question
     {
-        public static void OneDotFour1(string s)
+        public OneDotFour()
+            : base(1.4, 1, 2)
         {
-            Console.WriteLine("Performing algorithm 1 for Question 1.4...");
 
+        }
+
+        public override void Finisher(bool result, int algorithm, object[] arguments)
+        {
+            if (arguments.Length < 1 || arguments[0].GetType() != typeof(string))
+            {
+                throw new ArgumentException("Arguments parameter must contain two strings.");
+            }
+
+            if (result)
+            {
+                Console.WriteLine("Algorithm {0}: \"{1}\" is a permutation of a palindrome.", algorithm, arguments[0]);
+            }
+            else
+            {
+                Console.WriteLine("Algorithm {0}: \"{1}\" is not a permutation of a palindrome.", algorithm, arguments[0]);
+            }
+        }
+
+        public bool OneDotFour1(string s)
+        {
             int[] characterCount = new int[26];
 
             foreach (char c in s.ToLower())
@@ -24,37 +46,22 @@ namespace Strings
                 }
             }
 
-            if (oddCount < 2)
-            {
-                Console.WriteLine("String \"{0}\" is a permutation of a palindrome.", s);
-            }
-            else
-            {
-                Console.WriteLine("String \"{0}\" is not a permutation of a palindrome.", s);
-            }
+
+            return oddCount < 2;
         }
 
         // Turns out algorithm 1 is an optimal solution, however there is another that uses a clever trick to use less memory.
-        public static void OneDotFour2(string s)
+        // This algorithm toggles a bit in a bit vector for each character in the string.
+        // If a letter's bit is a 0, then it was seen an even number of times.
+        // If a letter's bit is a 1, then it was seen an odd number of times.
+        public bool OneDotFour2(string s)
         {
-            Console.WriteLine("Performing algorithm 2 for Question 1.4...");
-
-            // This algorithm toggles a bit in a bit vector for each character in the string.
-            // If a letter's bit is a 0, then it was seen an even number of times.
-            // If a letter's bit is a 1, then it was seen an odd number of times.
             int bitVector = GetBitVector(s);
 
-            if (StringIsPalindromePermutation(bitVector))
-            {
-                Console.WriteLine("String \"{0}\" is a permutation of a palindrome.", s);
-            }
-            else
-            {
-                Console.WriteLine("String \"{0}\" is not a permutation of a palindrome.", s);
-            }
+            return StringIsPalindromePermutation(bitVector);
         }
 
-        private static int GetBitVector(string s)
+        private int GetBitVector(string s)
         {
             int bitVector = 0;
 
@@ -68,7 +75,7 @@ namespace Strings
             return bitVector;
         }
 
-        private static int Toggle(int bitVector, int characterCode)
+        private int Toggle(int bitVector, int characterCode)
         {
             if (characterCode < 0)
             {
@@ -91,7 +98,7 @@ namespace Strings
             return bitVector;
         }
 
-        private static bool StringIsPalindromePermutation(int bitVector)
+        private bool StringIsPalindromePermutation(int bitVector)
         {
             if (bitVector == 0)
             {

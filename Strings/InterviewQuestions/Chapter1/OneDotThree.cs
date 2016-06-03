@@ -1,17 +1,43 @@
-﻿using System;
+﻿using InterviewQuestions.Infrastructure;
+using System;
 
-namespace Strings
+namespace InterviewQuestions.Chapter1
 {
-    public class OneDotThree
+    public class OneDotThree : Question
     {
-        public static void OneDotThree1(string phrase)
+        private string _transformed = "";
+
+        public OneDotThree()
+            : base(1.3, 1, 2)
         {
-            Console.WriteLine("Performing algorithm 1 for Question 1.3...");
+
+        }
+
+        public override void Finisher(bool result, int algorithm, object[] arguments)
+        {
+            if (arguments.Length < 1 || arguments[0].GetType() != typeof(string))
+            {
+                throw new ArgumentException("Arguments parameter must contain one string.");
+            }
+
+            if(!_transformed.Equals(""))
+            {
+                Console.WriteLine("Algorithm {0}: Old - \"{1}\" New - \"{2}\"", algorithm, arguments[0], _transformed);
+            }
+            else
+            {
+                Console.WriteLine("Algorithm {0} failed.", algorithm);
+            }
+        }
+
+        public void OneDotThree1(string phrase)
+        {
+            _transformed = "";
 
             int phraseLength = GetLength(phrase);
 
             char[] newPhrase = new char[phraseLength];
-            for(int i = 0, j = 0; i < phrase.Length; i++, j++)
+            for (int i = 0, j = 0; i < phrase.Length; i++, j++)
             {
                 if (phrase[i] == ' ')
                 {
@@ -27,12 +53,12 @@ namespace Strings
                 }
             }
 
-            Console.WriteLine("Old: \"{0}\"\nNew: \"{1}\"", phrase, new string(newPhrase));
+            _transformed = new string(newPhrase);
         }
 
-        public static void OneDotThree2(string phrase)
+        public void OneDotThree2(string phrase)
         {
-            Console.WriteLine("Performing algorithm 2 for Question 1.3...");
+            _transformed = "";
 
             int spaceCount = 0;
             for (int i = 0; i < phrase.Length; i++)
@@ -43,6 +69,7 @@ namespace Strings
                 }
             }
 
+            // This is correct code but not in .NET. You can't edit strings like that. In other languages it's valid.
             //int newLength = phrase.Length + spaceCount * 2;
             //for (int i = phrase.Length - 1; i >= 0; i--)
             //{
@@ -59,11 +86,9 @@ namespace Strings
             //        newLength--;
             //    }
             //}
-
-            Console.WriteLine("This is correct code but not in .NET. You can't edit strings like that. In other languages it's valid.");
         }
 
-        private static int GetLength(string phrase)
+        private int GetLength(string phrase)
         {
             int count = 0;
 

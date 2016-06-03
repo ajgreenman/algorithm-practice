@@ -1,28 +1,40 @@
-﻿using System;
+﻿using InterviewQuestions.Infrastructure;
+using System;
 using System.Collections.Generic;
 
-namespace Strings
+namespace InterviewQuestions.Chapter1
 {
-    public class OneDotEight
+    public class OneDotEight : Question
     {
         private static int[,] Matrix;
 
-        public static void OneDotEight1()
+        public OneDotEight()
+            : base(1.8, 0, 3)
         {
-            Console.WriteLine("Performing algorithm 1 for Question 1.8...");
 
-            Matrix = OneDotSeven.CreateRandomMatrix();
+        }
+
+        public override void Finisher(bool result, int algorithm, object[] arguments)
+        {
+            Console.WriteLine("\nZeroed Matrix");
+            StringAlgorithms.PrintMatrix(Matrix);
+
+        }
+
+        public void OneDotEight1()
+        {
+            Matrix = StringAlgorithms.CreateRandomMatrix();
 
             Console.WriteLine("\nOriginal Matrix");
-            OneDotSeven.PrintMatrix(Matrix);
+            StringAlgorithms.PrintMatrix(Matrix);
 
             List<Point> points = new List<Point>();
 
-            for(int i = 0; i < Matrix.GetLength(0); i++)
+            for (int i = 0; i < Matrix.GetLength(0); i++)
             {
-                for(int j = 0; j < Matrix.GetLength(1); j++)
+                for (int j = 0; j < Matrix.GetLength(1); j++)
                 {
-                    if(Matrix[i, j] == 0)
+                    if (Matrix[i, j] == 0)
                     {
                         Point p = new Point(i, j);
                         points.Add(p);
@@ -30,26 +42,21 @@ namespace Strings
                 }
             }
 
-            foreach(var p in points)
+            foreach (var p in points)
             {
                 ZeroOutCol(p.X);
                 ZeroOutRow(p.Y);
             }
-
-            Console.WriteLine("\nZeroed Matrix");
-            OneDotSeven.PrintMatrix(Matrix);
         }
 
         // This algorithm is slightly more efficient than my original, in that it uses less space. The boolean arrays
         // will only ever hold 2*N memory, while my Point list may potentially hold up to N*N Points, which is far more memory.
-        public static void OneDotEight2()
+        public void OneDotEight2()
         {
-            Console.WriteLine("Performing algorithm 2 for Question 1.8...");
-
-            Matrix = OneDotSeven.CreateRandomMatrix();
+            Matrix = StringAlgorithms.CreateRandomMatrix();
 
             Console.WriteLine("\nOriginal Matrix");
-            OneDotSeven.PrintMatrix(Matrix);
+            StringAlgorithms.PrintMatrix(Matrix);
 
             bool[] markedCols = new bool[Matrix.GetLength(0)];
             bool[] markedRows = new bool[Matrix.GetLength(1)];
@@ -66,9 +73,9 @@ namespace Strings
                 }
             }
 
-            for(int i = 0; i < markedCols.Length; i++)
+            for (int i = 0; i < markedCols.Length; i++)
             {
-                if(markedCols[i])
+                if (markedCols[i])
                 {
                     ZeroOutCol(i);
                 }
@@ -81,32 +88,27 @@ namespace Strings
                     ZeroOutRow(i);
                 }
             }
-
-            Console.WriteLine("\nZeroed Matrix");
-            OneDotSeven.PrintMatrix(Matrix);
         }
 
         // This algorithm uses little extra memory space to implement. It uses the first row and column to hold zeroes if any
         // other point in the corresponding row/column has a zero (we can do this because if so, then the value in the first
         // row or column will be zeroed out anyway). We must first check if the first row and column have zeroes so that at the
         // end we can zero them out as well.
-        public static void OneDotEight3()
+        public void OneDotEight3()
         {
-            Console.WriteLine("Performing algorithm 3 for Question 1.8...");
-
-            Matrix = OneDotSeven.CreateRandomMatrix();
+            Matrix = StringAlgorithms.CreateRandomMatrix();
 
             Console.WriteLine("\nOriginal Matrix");
-            OneDotSeven.PrintMatrix(Matrix);
+            StringAlgorithms.PrintMatrix(Matrix);
 
             bool colZeroHasZero = false;
             bool rowZeroHasZero = false;
 
-            for(int i = 0; i < Matrix.GetLength(0); i++)
+            for (int i = 0; i < Matrix.GetLength(0); i++)
             {
-                if(Matrix[i, 0] == 0)
+                if (Matrix[i, 0] == 0)
                 {
-                    colZeroHasZero = true;
+                    rowZeroHasZero = true;
                     break;
                 }
             }
@@ -115,16 +117,16 @@ namespace Strings
             {
                 if (Matrix[0, i] == 0)
                 {
-                    rowZeroHasZero = true;
+                    colZeroHasZero = true;
                     break;
                 }
             }
 
-            for(int i = 1; i < Matrix.GetLength(0); i++)
+            for (int i = 1; i < Matrix.GetLength(0); i++)
             {
-                for(int j = 1; j < Matrix.GetLength(1); j++)
+                for (int j = 1; j < Matrix.GetLength(1); j++)
                 {
-                    if(Matrix[i, j] == 0)
+                    if (Matrix[i, j] == 0)
                     {
                         Matrix[i, 0] = 0;
                         Matrix[0, j] = 0;
@@ -132,9 +134,9 @@ namespace Strings
                 }
             }
 
-            for(int i = 1; i < Matrix.GetLength(0); i++)
+            for (int i = 1; i < Matrix.GetLength(0); i++)
             {
-                if(Matrix[i, 0] == 0)
+                if (Matrix[i, 0] == 0)
                 {
                     ZeroOutCol(i);
                 }
@@ -148,29 +150,26 @@ namespace Strings
                 }
             }
 
-            if(colZeroHasZero)
+            if (colZeroHasZero)
             {
                 ZeroOutCol(0);
             }
 
-            if(rowZeroHasZero)
+            if (rowZeroHasZero)
             {
                 ZeroOutRow(0);
             }
-
-            Console.WriteLine("\nZeroed Matrix");
-            OneDotSeven.PrintMatrix(Matrix);
         }
 
-        private static void ZeroOutRow(int row)
+        private void ZeroOutRow(int row)
         {
-            for(int col = 0; col < Matrix.GetLength(0); col++)
+            for (int col = 0; col < Matrix.GetLength(0); col++)
             {
                 Matrix[col, row] = 0;
             }
         }
 
-        private static void ZeroOutCol(int col)
+        private void ZeroOutCol(int col)
         {
             for (int row = 0; row < Matrix.GetLength(1); row++)
             {

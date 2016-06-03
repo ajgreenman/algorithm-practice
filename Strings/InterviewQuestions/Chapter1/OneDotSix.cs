@@ -1,28 +1,46 @@
-﻿using System;
+﻿using InterviewQuestions.Infrastructure;
+using System;
 using System.Text;
 
-namespace Strings
+namespace InterviewQuestions.Chapter1
 {
     // Implement a method to perform basic string compression using the counts of repeated characters.
     // For example, the atring aabcccccaaa would become a2b1c5a3. If the "compressed" string would not become
     // smaller than the original string, your method should return the original string. You can assume the
     // string has only uppercase and lowercase letters (a - z).
-    public class OneDotSix
+    public class OneDotSix : Question
     {
-        public static void OneDotSix1(string s)
-        {
-            Console.WriteLine("Performing algorithm 1 for Question 1.6...");
+        private string _compressed = "";
 
+        public OneDotSix()
+            : base(1.6, 1, 4)
+        {
+
+        }
+
+        public override void Finisher(bool result, int algorithm, object[] arguments)
+        {
+            if (arguments.Length < 1 || arguments[0].GetType() != typeof(string))
+            {
+                throw new ArgumentException("Arguments parameter must contain one string.");
+            }
+
+            Console.WriteLine("Algorithm {0}: Original - \"{1}\" Compressed - \"{2}\"", algorithm, arguments[0], _compressed);
+        }
+
+        public void OneDotSix1(string s)
+        {
             int letterCount = 0;
             string compressed = "" + s[0];
             char currentCharacter = s[0];
 
-            for(int i = 0; i < s.Length; i++)
+            for (int i = 0; i < s.Length; i++)
             {
-                if(s[i] == currentCharacter)
+                if (s[i] == currentCharacter)
                 {
                     letterCount++;
-                } else
+                }
+                else
                 {
                     compressed += letterCount;
                     letterCount = 1;
@@ -31,24 +49,22 @@ namespace Strings
                 }
             }
 
-            if(letterCount > 0)
+            if (letterCount > 0)
             {
                 compressed += letterCount;
             }
 
-            if(s.Length <= compressed.Length)
+            if (s.Length <= compressed.Length)
             {
                 compressed = s;
             }
 
-            Console.WriteLine("\"{0}\" will be compressed to \"{1}\"", s, compressed);
+            _compressed = compressed;
         }
 
         // Instead of doing constant string concatenations (which can be expensive), we use a char array.
-        public static void OneDotSix2(string s)
+        public void OneDotSix2(string s)
         {
-            Console.WriteLine("Performing algorithm 2 for Question 1.6...");
-
             int letterCount = 0;
             int compressedIndex = 1;
             char[] compressed = new char[s.Length];
@@ -56,15 +72,15 @@ namespace Strings
             char currentCharacter = s[0];
             bool tooBig = false;
 
-            for(int i = 0; i < s.Length; i++)
+            for (int i = 0; i < s.Length; i++)
             {
-                if(s[i] == currentCharacter)
+                if (s[i] == currentCharacter)
                 {
                     letterCount++;
                 }
                 else
                 {
-                    if(compressedIndex < compressed.Length)
+                    if (compressedIndex < compressed.Length)
                     {
                         compressed[compressedIndex] = Convert.ToChar(letterCount + 48);
                         compressedIndex++;
@@ -97,13 +113,13 @@ namespace Strings
                 compressedIndex++;
             }
 
-            if(compressedIndex >= s.Length)
+            if (compressedIndex >= s.Length)
             {
                 tooBig = true;
             }
 
             string retval;
-            if(tooBig)
+            if (tooBig)
             {
                 retval = s;
             }
@@ -112,22 +128,22 @@ namespace Strings
                 retval = new string(compressed);
             }
 
-            Console.WriteLine("\"{0}\" will be compressed to \"{1}\"", s, retval);
+            _compressed = retval;
         }
 
         // Instead of doing dumb things with char arrays, I use a StringBuilder.
-        public static void OneDotSix3(string s)
+        public void OneDotSix3(string s)
         {
             Console.WriteLine("Implementing algorithm 3 of Question 1.6...");
 
             int letterCount = 0;
             StringBuilder compressed = new StringBuilder();
-            
-            for(int i = 0; i < s.Length; i++)
+
+            for (int i = 0; i < s.Length; i++)
             {
                 letterCount++;
 
-                if(i + 1 >= s.Length || s[i] !=  s[i + 1])
+                if (i + 1 >= s.Length || s[i] != s[i + 1])
                 {
                     compressed.Append(s[i]);
                     compressed.Append(letterCount);
@@ -136,26 +152,24 @@ namespace Strings
             }
 
             string retval = compressed.ToString();
-            if(retval.Length >= s.Length)
+            if (retval.Length >= s.Length)
             {
                 retval = s;
             }
 
-            Console.WriteLine("\"{0}\" will be compressed to \"{1}\"", s, retval);
+            _compressed = retval;
         }
 
         // This algorithm goes through the string twice: Once to check the compressed length (without doing compression), 
         // and once to do the compressing. If the compressed length from the first loop is greater than the original string
         // length, we break early and return the original string. This algorithm will be better for bad input but slightly
         // worse for good input (it will still be O(N) time).
-        public static void OneDotSix4(string s)
+        public void OneDotSix4(string s)
         {
-            Console.WriteLine("Implementing algorithm 4 of Question 1.6...");
-
             int finalLength = CountCompression(s);
-            if(finalLength > s.Length)
+            if (finalLength > s.Length)
             {
-                Console.WriteLine("\"{0}\" will be compressed to \"{1}\"", s, s);
+                _compressed = s;
                 return;
             }
 
@@ -174,7 +188,7 @@ namespace Strings
                 }
             }
 
-            Console.WriteLine("\"{0}\" will be compressed to \"{1}\"", s, compressed.ToString());
+            _compressed = compressed.ToString();
         }
 
         private static int CountCompression(string s)

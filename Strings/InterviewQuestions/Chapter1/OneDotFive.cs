@@ -1,23 +1,39 @@
-﻿using System;
+﻿using InterviewQuestions.Infrastructure;
+using System;
 using System.Text;
 
-namespace Strings
+namespace InterviewQuestions.Chapter1
 {
-    // There are three types of edits that can be performed on strings; insert a character, remove a character,
-    // or replace a character. Given two strings, write a function to check if they are one edit (or zero edits) away.
-    // pie -> pit
-    // pie -> pike
-    // pie -> pi
-    public static class OneDotFive
+    public class OneDotFive : Question
     {
-        public static void OneDotFive1(string a, string b)
+        public OneDotFive()
+            : base(1.5, 2, 2)
         {
-            Console.WriteLine("Performing algorithm 1 for Question 1.5...");
 
+        }
+
+        public override void Finisher(bool result, int algorithm, object[] arguments)
+        {
+            if (arguments.Length < 2 || arguments[0].GetType() != typeof(string) || arguments[1].GetType() != typeof(string))
+            {
+                throw new ArgumentException("Arguments parameter must contain two strings.");
+            }
+
+            if (result)
+            {
+                Console.WriteLine("\"{0}\" and \"{1}\" are one or less edits away from each other.", arguments[0], arguments[1]);
+            }
+            else
+            {
+                Console.WriteLine("\"{0}\" and \"{1}\" are more than one edit away from each other.", arguments[0], arguments[1]);
+            }
+        }
+
+        public bool OneDotFive1(string a, string b)
+        {
             if (a.Equals(b))
             {
-                Console.WriteLine(OneDotFiveValid(true, a, b));
-                return;
+                return true;
             }
 
             if (a.Length == b.Length)
@@ -28,8 +44,7 @@ namespace Strings
                     if (a[i] != b[i])
                     {
                         sbA[i] = b[i];
-                        Console.WriteLine(OneDotFiveValid(sbA.ToString().Equals(b), a, b));
-                        break;
+                        return sbA.ToString().Equals(b);
                     }
                 }
             }
@@ -37,7 +52,7 @@ namespace Strings
             {
                 if (Math.Abs(a.Length - b.Length) > 1)
                 {
-                    Console.WriteLine(OneDotFiveValid(false, a, b));
+                    return false;
                 }
 
                 int shortLength = a.Length <= b.Length ? a.Length : b.Length;
@@ -50,30 +65,25 @@ namespace Strings
                         {
                             StringBuilder sbB = new StringBuilder(b);
                             sbB.Remove(i, 1);
-                            Console.WriteLine(OneDotFiveValid(a.Equals(sbB.ToString()), a, b));
-                            return;
+                            return a.ToString().Equals(sbB);
                         }
 
                         StringBuilder sbA = new StringBuilder(a);
                         sbA.Remove(i, 1);
-                        Console.WriteLine(OneDotFiveValid(sbA.ToString().Equals(b), a, b));
-                        return;
+                        return sbA.ToString().Equals(b);
                     }
                 }
-
-                Console.WriteLine(OneDotFiveValid(true, a, b));
             }
+
+            return true;
         }
 
-        public static void OneDotFive2(string a, string b)
+        public bool OneDotFive2(string a, string b)
         {
-            Console.WriteLine("Performing algorithm 2 for Question 1.5...");
-
             // If the difference in length is more than one than return false.
-            if(Math.Abs(a.Length - b.Length) > 1)
+            if (Math.Abs(a.Length - b.Length) > 1)
             {
-                Console.WriteLine(OneDotFiveValid(false, a, b));
-                return;
+                return false;
             }
 
             string longerString = a.Length > b.Length ? a : b;
@@ -83,25 +93,24 @@ namespace Strings
 
             bool foundDifference = false;
 
-            while(iShort < shorterString.Length && iLong < longerString.Length)
+            while (iShort < shorterString.Length && iLong < longerString.Length)
             {
-                if(longerString[iLong] != shorterString[iShort])
+                if (longerString[iLong] != shorterString[iShort])
                 {
-                    if(foundDifference)
+                    if (foundDifference)
                     {
                         // This means we found a second difference and we return false.
-                        Console.WriteLine(OneDotFiveValid(false, a, b));
-                        return;
+                        return false;
                     }
 
                     foundDifference = true; // This marks our first difference.
 
-                    if(shorterString.Length == longerString.Length)
+                    if (shorterString.Length == longerString.Length)
                     {
                         // If the second string is the same we increment to keep them lined up.
                         // Otherwise we don't which should line up the remaining characters of both strings (making them the same length).
                         iShort++;
-                                  
+
                     }
                 }
                 else
@@ -113,19 +122,7 @@ namespace Strings
                 iLong++; // Always increment the longer string.
             }
 
-            Console.WriteLine(OneDotFiveValid(true, a, b));
-        }
-
-        private static string OneDotFiveValid(bool valid, string a, string b)
-        {
-            if (valid)
-            {
-                return string.Format("True! String \"{0}\" and string \"{1}\" are one or less edits away from each other.", a, b);
-            }
-            else
-            {
-                return string.Format("False! String \"{0}\" and string \"{1}\" are more than one edit away from each other.", a, b);
-            }
+            return true;
         }
     }
 }
