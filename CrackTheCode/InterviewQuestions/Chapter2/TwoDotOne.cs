@@ -17,7 +17,8 @@ namespace InterviewQuestions.Chapter2
 
         public void TwoDotOne1()
         {
-
+            Chapter2Node head = LinkedListAlgorithms.CreateIntLinkedList(10, 10);
+            LinkedListAlgorithms.PrintLinkedList(head);
         }
 
         public override void Finisher(bool result, int algorithm, object[] arguments)

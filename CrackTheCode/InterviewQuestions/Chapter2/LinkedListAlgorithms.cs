@@ -8,15 +8,35 @@ namespace InterviewQuestions.Chapter2
 {
     public static class LinkedListAlgorithms
     {
-        public static void CreateIntLinkedList(int? size = null)
+        public static Chapter2Node CreateIntLinkedList(int size = 100, int max = 100)
         {
             Random r = new Random();
-            if(size == null)
+
+            Chapter2Node head = new Chapter2Node(r.Next(0, max));
+            Chapter2Node current = head;
+
+            for(int i = 1; i < size; i++)
             {
-                size = r.Next(0, 100);
+                current.Next = new Chapter2Node(r.Next(0, max));
+                current = current.Next;
             }
 
+            return head;
+        }
 
+        public static void PrintLinkedList(Chapter2Node head)
+        {
+            Chapter2Node current = head;
+
+            int count = 0;
+            Console.WriteLine("Node {0}: {1}", count, current.Data);
+
+            while (current.Next != null)
+            {
+                count++;
+                Console.WriteLine("Node {0}: {1}", count, current.Next.Data);
+                current = current.Next;
+            }
         }
     }
 }
