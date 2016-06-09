@@ -20,7 +20,7 @@ namespace InterviewQuestions.Chapter2
         }
 
         public TwoDotTwo()
-            : base(2.2, 1, 2)
+            : base(2.2, 1, 3)
         {
 
         }
@@ -82,6 +82,33 @@ namespace InterviewQuestions.Chapter2
             }
 
             return new Bucket(--b.K, current.Data);
+        }
+
+        public void TwoDotTwo3(string value)
+        {
+            int k = Convert.ToInt32(value);
+            Chapter2Node head = LinkedListAlgorithms.CreateIntLinkedList(10, 10);
+            LinkedListAlgorithms.PrintLinkedList(head);
+
+            Chapter2Node endNode = head;
+            for(int i = 1; i < k; i++)
+            {
+                if (endNode.Next == null)
+                {
+                    Console.WriteLine("The linked list is too small.");
+                    return;
+                }
+                endNode = endNode.Next;
+            }
+
+            Chapter2Node current = head;
+            while(endNode.Next != null)
+            {
+                endNode = endNode.Next;
+                current = current.Next;
+            }
+
+            Console.WriteLine("{0} elements from the end: {1}", k, current.Data);
         }
     }
 }
