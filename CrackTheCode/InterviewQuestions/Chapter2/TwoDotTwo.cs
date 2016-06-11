@@ -38,15 +38,9 @@ namespace InterviewQuestions.Chapter2
             Chapter2Node head = LinkedListAlgorithms.CreateIntLinkedList(100, 10);
             LinkedListAlgorithms.PrintLinkedList(head);
 
-            int count = 1;
-            Chapter2Node current = head;
-            while(current.Next != null)
-            {
-                current = current.Next;
-                count++;
-            }
+            int count = LinkedListAlgorithms.GetLength(head);
 
-            current = head;
+            Chapter2Node current = head;
             while(count > k)
             {
                 current = current.Next;

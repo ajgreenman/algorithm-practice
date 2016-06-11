@@ -12,7 +12,6 @@ namespace InterviewQuestions
             Console.Write("Enter chapter number: ");
             int chapter = Convert.ToInt32(Console.ReadLine());
             Console.Write("Enter question number: ");
-
             int question = Convert.ToInt32(Console.ReadLine());
 
             string className = Numbers[chapter] + "Dot" + Numbers[question];

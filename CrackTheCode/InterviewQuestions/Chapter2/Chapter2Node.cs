@@ -61,5 +61,21 @@ namespace InterviewQuestions.Chapter2
 
             return head;
         }
+
+        public Chapter2Node CloneLinkedList()
+        {
+            Chapter2Node head = this;
+            Chapter2Node clone = new Chapter2Node(head.Data);
+            Chapter2Node current = clone;
+
+            while(head.Next != null)
+            {
+                current.Next = new Chapter2Node(head.Next.Data);
+                current = current.Next;
+                head = head.Next;
+            }
+
+            return clone;
+        }
     }
 }
